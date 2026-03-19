@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>ERENLINE34 Instagram Viewer</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>ERENLINE34</h1>
+    </header>
+
+    <div class="search-box">
+      <input type="text" id="usernameInput" placeholder="Enter username..." autocomplete="off">
+      <button id="searchBtn">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+          stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Recent Searches -->
+    <div id="recentSearches" class="recent-searches hidden">
+      <div class="recent-header">
+        <span>Recent Searches</span>
+        <button id="clearRecentBtn" class="clear-btn">Clear</button>
+      </div>
+      <div id="recentList" class="recent-list"></div>
+    </div>
+
+    <div id="loading" class="hidden">
+      <div class="skeleton-card">
+        <div class="skeleton-header">
+          <div class="skeleton skeleton-avatar"></div>
+          <div class="skeleton-info">
+            <div class="skeleton skeleton-line title"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+        </div>
+        <div class="skeleton-stats">
+          <div class="skeleton skeleton-stat"></div>
+          <div class="skeleton skeleton-stat"></div>
+          <div class="skeleton skeleton-stat"></div>
+        </div>
+        <div class="skeleton-bio">
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+        </div>
+        <div class="skeleton skeleton-btn"></div>
+      </div>
+    </div>
+
+    <div id="error" class="error-msg hidden">
+      <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none"
+        class="error-icon">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <span id="errorText"></span>
+        <a id="errorExternalLink" href="#" target="_blank" class="action-btn secondary hidden"
+          style="font-size: 12px; padding: 6px 12px; width: fit-content; text-decoration: none;">Picuki'de İncele
+          (Anonim)</a>
+      </div>
+    </div>
+
+    <div id="profileResult" class="profile-card hidden">
+      <div class="profile-header">
+        <div class="avatar-container">
+          <img id="avatar" src="" alt="Profile Picture">
+        </div>
+        <div class="user-info">
+          <h2 id="fullName">Full Name</h2>
+          <p id="username">@username</p>
+          <div class="badges">
+            <span id="verifiedBadge" class="badge verified hidden">✓ Verified</span>
+            <span id="privateBadge" class="badge private hidden">🔒 Private</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-value" id="postsCount">0</span>
+          <span class="stat-label">Posts</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="followersCount">0</span>
+          <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="followingCount">0</span>
+          <span class="stat-label">Following</span>
+        </div>
+      </div>
+    </div>
+    <div class="bio-section hidden">
+      <p id="bioText"></p>
+      <a id="externalLink" href="#" target="_blank" class="external-link hidden"></a>
+    </div>
+
+    <!-- Highlights Section -->
+    <div id="highlightsSection" class="highlights-section hidden">
+      <div id="highlightsList" class="highlights-list"></div>
+    </div>
+
+    <div class="action-buttons hidden">
+      <a id="viewOnIg" href="#" target="_blank" class="btn-primary">View on Instagram</a>
+    </div>
+
+    <div id="postsSection" class="posts-section hidden">
+      <div class="posts-tabs">
+        <button id="tabPosts" class="post-tab active">
+          <svg aria-label="Posts" class="tab-icon" fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              x1="14.985" x2="14.985" y1="3" y2="21"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              x1="9.015" x2="9.015" y1="3" y2="21"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              x1="21" x2="3" y1="9.015" y2="9.015"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              x1="21" x2="3" y1="14.985" y2="14.985"></line>
+            <rect fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2" width="18" x="3" y="3"></rect>
+          </svg>
+        </button>
+        <button id="tabReels" class="post-tab">
+          <svg aria-label="Reels" class="tab-icon" fill="currentColor" height="24" viewBox="0 0 24 24" width="24">
+            <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="2.049" x2="21.95"
+              y1="7.002" y2="7.002"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              x1="13.504" x2="16.362" y1="2.001" y2="7.002"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              x1="7.207" x2="10.002" y1="2.11" y2="7.002"></line>
+            <path d="M2.049 7.002v12.553a2.446 2.446 0 0 0 2.448 2.445h15.007a2.446 2.446 0 0 0 2.446-2.445V7.002"
+              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <path d="M12 17.002L15.333 14 12 11z" fill="currentColor"></path>
+          </svg>
+        </button>
+      </div>
+      <div id="postsGrid" class="posts-grid hidden"></div>
+
+      <!-- Pagination -->
+      <div id="loadMoreContainer" class="load-more-container hidden">
+        <button id="loadMoreBtn" class="action-btn secondary" style="width: auto; padding: 8px 20px;">Daha Fazla
+          Yükle</button>
+      </div>
+      <div id="emptyPostsState" class="empty-posts-state hidden">
+        <p>No content available.</p>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- HD Profile Picture Lightbox -->
+  <div id="lightbox" class="lightbox hidden">
+    <div class="lightbox-content">
+      <span id="closeLightbox" class="close-lightbox">X</span>
+      <img id="lightboxImg" src="" alt="High-Res Profile Picture">
+    </div>
+  </div>
+
+  <!-- Native Post Modal -->
+  <div id="postModal" class="lightbox hidden">
+    <div class="lightbox-content post-modal-content">
+      <span id="closePostModal" class="close-lightbox">X</span>
+      <div id="postMediaContainer" class="post-media-container">
+        <!-- Image or Video goes here -->
+        <img id="postModalImg" src="" alt="Post">
+        <video id="postModalVideo" class="hidden" autoplay playsinline></video>
+
+        <!-- Custom Video Progress -->
+        <div id="postVideoProgressContainer" class="video-progress-container hidden">
+          <div id="postVideoProgressBar" class="video-progress-bar"></div>
+        </div>
+
+        <!-- Carousel Navigation -->
+        <button id="prevMediaBtn" class="carousel-nav left hidden">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button id="nextMediaBtn" class="carousel-nav right hidden">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <div id="carouselDots" class="carousel-dots hidden"></div>
+      </div>
+      <div class="post-info">
+        <div class="post-stats-row">
+          <div class="post-stat"><span id="postLikes">0</span> Likes</div>
+          <div class="post-stat"><span id="postComments">0</span> Comments</div>
+        </div>
+        <p id="postCaption" class="post-caption"></p>
+        <a id="postExternalLink" href="#" target="_blank" class="external-link" style="margin-top: 10px;">View on
+          Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Native Story Modal -->
+  <div id="storyModal" class="lightbox hidden">
+    <div class="lightbox-content story-modal-content">
+      <span id="closeStoryModal" class="close-lightbox">X</span>
+      <div id="storyProgressBarContainer" class="story-progress-container"></div>
+      <div class="story-media-container">
+        <div id="storyLoading" class="story-loading hidden">
+          <div class="story-spinner"></div>
+        </div>
+        <img id="storyModalImg" src="" class="story-media" alt="Story">
+        <video id="storyModalVideo" class="story-media hidden" autoplay playsinline></video>
+
+        <div id="storyTapLeft" class="story-nav left"></div>
+        <div id="storyTapRight" class="story-nav right"></div>
+      </div>
+      <div class="story-user-info">
+        <img id="storyUserAvatar" src="" alt="Avatar">
+        <span id="storyUsername"></span>
+        <span id="storyTime"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Friends List Modal -->
+  <div id="friendsModal" class="lightbox hidden">
+    <div class="lightbox-content friends-modal-content">
+      <div class="friends-header">
+        <h3 id="friendsModalTitle">Loading...</h3>
+        <span id="closeFriendsModal" class="close-lightbox">X</span>
+      </div>
+      <div id="friendsLoading" class="story-loading hidden">
+        <div class="story-spinner"></div>
+      </div>
+      <div id="friendsListContainer" class="friends-list-container">
+        <!-- Friend items will go here -->
+      </div>
+      <div id="friendsLoadMoreContainer" class="load-more-container hidden" style="padding: 10px 0;">
+        <button id="friendsLoadMoreBtn" class="action-btn secondary"
+          style="width: auto; padding: 6px 16px; font-size: 12px;">Daha Fazla Yükle</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
