@@ -5,15 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
-  <title>ERENLINE34 Instagram Viewer</title>
+  <title>InstaScopeViewer</title>
   <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="premium.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
   <div class="container">
     <header class="header">
-      <h1>ERENLINE34</h1>
+      <h1>InstaScopeViewer</h1>
     </header>
 
     <div class="search-box">
@@ -156,7 +157,12 @@
           Yükle</button>
       </div>
       <div id="emptyPostsState" class="empty-posts-state hidden">
-        <p>No content available.</p>
+        <svg class="empty-state-icon" viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <p style="font-weight: 500; margin-top: 8px;">No content available yet.</p>
       </div>
     </div>
   </div>
@@ -251,6 +257,15 @@
           style="width: auto; padding: 6px 16px; font-size: 12px;">Daha Fazla Yükle</button>
       </div>
     </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container">
+    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span id="toastText">Error occurred</span>
   </div>
 
   <script src="popup.js"></script>

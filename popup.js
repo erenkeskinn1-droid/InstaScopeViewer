@@ -129,7 +129,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${diffInWeeks}w`;
   };
 
+  const showToast = (msg) => {
+    const toastContainer = document.getElementById('toastContainer');
+    const toastText = document.getElementById('toastText');
+    if(toastContainer && toastText) {
+      toastText.textContent = msg;
+      toastContainer.classList.add('show');
+      setTimeout(() => {
+        toastContainer.classList.remove('show');
+      }, 3000);
+    }
+  };
+
   const showError = (msg, username = null) => {
+    showToast(msg);
     errorText.textContent = msg;
     if (msg.includes('Gizli profil, limit aşımı veya engellenmiş hesap') && username) {
       errorExternalLink.href = `https://www.picuki.com/profile/${username}`;
@@ -344,7 +357,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     friendsModal.classList.remove('hidden');
-    friendsLoadMoreContainer.classList.add('hidden');
+    if (!append) {
+      friendsLoadMoreContainer.classList.add('hidden');
+    }
 
     try {
       const endpoint = type === 'followers' ? 'FETCH_FOLLOWERS' : 'FETCH_FOLLOWING';
@@ -408,13 +423,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isFetchingFriendsMore || !friendsNextMaxId) return;
 
     isFetchingFriendsMore = true;
-    friendsLoadMoreBtn.textContent = 'Yükleniyor...';
+    friendsLoadMoreBtn.innerHTML = '<div class="btn-spinner"></div> Yükleniyor...';
     friendsLoadMoreBtn.disabled = true;
 
     await fetchAndRenderFriends(currentFriendsType, currentFriendsUserId, friendsNextMaxId, true);
 
     isFetchingFriendsMore = false;
-    friendsLoadMoreBtn.textContent = 'Daha Fazla Yükle';
+    friendsLoadMoreBtn.innerHTML = 'Daha Fazla Yükle';
     friendsLoadMoreBtn.disabled = false;
   };
 
@@ -952,7 +967,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!currentTargetId) return;
 
         isFetchingMore = true;
-        loadMoreBtn.textContent = 'Yükleniyor...';
+        loadMoreBtn.innerHTML = '<div class="btn-spinner"></div> Yükleniyor...';
         loadMoreBtn.disabled = true;
 
         try {
@@ -986,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error("Load more error", e);
         } finally {
           isFetchingMore = false;
-          loadMoreBtn.textContent = 'Daha Fazla Yükle';
+          loadMoreBtn.innerHTML = 'Daha Fazla Yükle';
           loadMoreBtn.disabled = false;
 
           const nextId = currentTab === 'posts' ? postsNextMaxId : reelsNextMaxId;
