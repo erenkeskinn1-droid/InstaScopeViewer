@@ -128,3 +128,30 @@
   opacity: 0.8;
   color: var(--accent);
 }
+
+/* Individual Remove Button in Recent Searches */
+.recent-remove-btn {
+  margin-left: 2px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+.recent-item:hover .recent-remove-btn {
+  opacity: 1;
+}
+
+.recent-remove-btn:hover {
+  color: var(--error);
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.2);
+}

@@ -193,8 +193,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const span = document.createElement('span');
       span.textContent = item.username;
 
+      const removeBtn = document.createElement('span');
+      removeBtn.innerHTML = '&times;';
+      removeBtn.className = 'recent-remove-btn';
+      removeBtn.title = 'Kaldır';
+
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent div click
+        recentArr = recentArr.filter(r => r.username !== item.username);
+        chrome.storage.local.set({ instaview_recents: recentArr });
+        renderRecents();
+      });
+
       div.appendChild(img);
       div.appendChild(span);
+      div.appendChild(removeBtn);
 
       div.addEventListener('click', () => {
         searchinput.value = item.username;
