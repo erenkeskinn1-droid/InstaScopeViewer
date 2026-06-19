@@ -230,9 +230,12 @@ async function fetchFollowers(userId, maxId = '') {
         if (!res.ok) throw new Error('Followers unavailable or private.');
 
         const data = await res.json();
+        // Instagram's followers API returns follow_ranking_token when there are more pages.
+        // has_more is unreliable — use the token's presence as the indicator instead.
+        const nextToken = data.follow_ranking_token || data.next_max_id || null;
         return {
             users: data.users || [],
-            next_max_id: data.next_max_id || null
+            next_max_id: nextToken
         };
     } catch (err) {
         throw err;

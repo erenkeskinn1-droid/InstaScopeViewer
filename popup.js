@@ -45,9 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentHighlights = [];
   let currentHighlightIndex = -1;
   let storyTimeout;
-  let storyStartTime = 0;
-  let storyElapsedTime = 0;
-  let isStoryPaused = false;
 
   // Result Elements
   const avatarContainer = document.querySelector('.avatar-container');
@@ -421,14 +418,15 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
 
-        // Toggle Load More
-        friendsLoadMoreContainer.classList.toggle('hidden', !friendsNextMaxId);
+        // Toggle Load More — do not toggle here, will be done in finally
       }
     } catch (e) {
       console.error('Could not fetch friends', e);
       if (!append) friendsListContainer.innerHTML = '<p style="text-align:center; padding: 20px; color: var(--error);">Failed to load list.</p>';
     } finally {
       friendsLoading.classList.add('hidden');
+      // Always update button visibility after data is loaded
+      friendsLoadMoreContainer.classList.toggle('hidden', !friendsNextMaxId);
     }
   };
 
@@ -436,13 +434,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isFetchingFriendsMore || !friendsNextMaxId) return;
 
     isFetchingFriendsMore = true;
-    friendsLoadMoreBtn.innerHTML = '<div class="btn-spinner"></div> Yükleniyor...';
+    friendsLoadMoreBtn.innerHTML = '<div class="btn-spinner"></div> Loading...';
     friendsLoadMoreBtn.disabled = true;
 
     await fetchAndRenderFriends(currentFriendsType, currentFriendsUserId, friendsNextMaxId, true);
 
     isFetchingFriendsMore = false;
-    friendsLoadMoreBtn.innerHTML = 'Daha Fazla Yükle';
+    friendsLoadMoreBtn.innerHTML = 'Load More';
     friendsLoadMoreBtn.disabled = false;
   };
 
